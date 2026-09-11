@@ -1,0 +1,8 @@
+dependencies = [
+    "jupyter",
+    "notebook",
+    "ipykernel",
+    "numpy",
+    "pandas",
+    "matplotlib"
+]
