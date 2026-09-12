@@ -1,0 +1,42 @@
+# Ambiente virtual
+venv/
+.venv/
+env/
+
+# Python - cache e arquivos compilados
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Jupyter Notebook
+.ipynb_checkpoints/
+
+# Build e instalação do pacote
+build/
+dist/
+*.egg-info/
+.eggs/
+
+# Testes e cobertura
+.pytest_cache/
+.coverage
+.coverage.*
+htmlcov/
+
+# Ferramentas Python
+.mypy_cache/
+.ruff_cache/
+
+# IDEs e editores=
+.vscode/
+.idea/
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Arquivos temporários e logs
+*.tmp
+*.temp
+*.log
