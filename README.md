@@ -120,8 +120,6 @@ Projeto-de-Metodos-Num/
 │       ├── newton_raphson.py
 │       └── secante.py
 │
-├── tests/
-│
 ├── pyproject.toml
 ├── .gitignore
 └── README.md
