@@ -1,108 +1,97 @@
-# ORIENTAÇÃO - MÉTODO DE NEWTON-RAPHSON
-#
-# A implementação do método fica a critério do responsável.
-# O importante é manter a função compatível com o notebook.
-#
-#
-# ASSINATURA OBRIGATÓRIA DA FUNÇÃO
-#
-# A função deve possuir a seguinte assinatura:
-#
-# def newton_raphson(
-#     f,
-#     df,
-#     x0,
-#     tolerancia_x=1e-6,
-#     tolerancia_f=1e-6,
-#     max_iter=100
-# ):
-#
-# Os nomes dos parâmetros devem ser mantidos, pois o notebook
-# realiza a chamada utilizando argumentos nomeados.
-#
-#
-# RETORNO OBRIGATÓRIO
-#
-# O método deve retornar um dicionário contendo:
-#
-# {
-#     "raiz": ...,
-#     "convergiu": ...,
-#     "iteracoes": ...,
-#     "erro": ...,
-#     "residuo": ...,
-#     "historico": ...
-# }
-#
-# "raiz":
-#     Aproximação final obtida para a raiz.
-#
-# "convergiu":
-#     True se o método atender aos critérios de convergência.
-#     False caso contrário.
-#
-# "iteracoes":
-#     Quantidade de iterações realizadas.
-#
-# "erro":
-#     Erro entre aproximações consecutivas.
-#
-# "residuo":
-#     Valor absoluto de f(x) na aproximação final.
-#
-# "historico":
-#     Lista com os dados de todas as iterações.
-#
-#
-# ESTRUTURA OBRIGATÓRIA DO HISTÓRICO
-#
-# Cada elemento do histórico deve conter, no mínimo:
-#
-# {
-#     "iteracao": ...,
-#     "x_anterior": ...,
-#     "x_atual": ...,
-#     "erro": ...,
-#     "residuo": ...
-# }
-#
-# Para compatibilidade com o notebook, "x_atual" deve
-# representar a aproximação obtida naquela iteração.
-#
-#
-# IMPORTAÇÃO NO PACOTE
-#
-# Após implementar a função newton_raphson(), também é
-# necessário importá-la no arquivo:
-#
-# src/metodos_numericos/__init__.py
-#
-# Adicionar ao __init__.py:
-#
-# from .newton_raphson import newton_raphson
-#
-# Isso é necessário para permitir que o notebook faça:
-#
-# from metodos_numericos import newton_raphson
-#
-#
-# SEPARAÇÃO ENTRE PACOTE E APLICAÇÃO
-#
-# Os arquivos em src/metodos_numericos/ devem implementar
-# somente os algoritmos genéricos.
-#
-# Não colocar neste arquivo informações específicas da
-# aplicação, como:
-#
-# g, L, t, v_alvo, f(H), phi(H), derivada_f(H),
-# intervalo [1, 2] ou aproximação inicial H0 = 1.5.
-#
-# A função newton_raphson() deve apenas receber f, df e x0
-# pelos parâmetros definidos em sua assinatura.
-#
-# A função f(H), a derivada_f(H) e o valor de H0 utilizados
-# na aplicação são definidos no notebook e fornecidos no
-# momento da chamada do método.
-#
-# Essas informações pertencem à aplicação do problema
-# e devem permanecer no notebook.
+def newton_raphson(
+    f,
+    df,
+    x0,
+    tolerancia_x=1e-6,
+    tolerancia_f=1e-6,
+    max_iter=100
+):
+
+    """
+    Método de Newton Raphson.
+
+    Parâmetros:
+    f:
+        Função original f(x) = 0.
+    
+    df:
+        Derivada de f, ou seja, f'(x).
+    
+    x0:
+        Aproximação inicial.
+
+    tolerancia_x:
+        Tolerância para a diferença entre
+        aproximações consecutivas.
+
+    tolerancia_f:
+        Tolerância para o resíduo |f(x)|.
+
+    max_iter=100:
+        Número máximo de iterações.
+
+    Retorna:
+        Um dicionário contendo:
+            raiz
+            convergiu
+            iteracoes
+            erro
+            residuo
+            historico
+    """
+
+    x_atual = x0
+    historico = []
+
+    for i in range(max_iter):
+
+        f_atual = f(x_atual)
+        df_atual = df(x_atual)
+
+        if df_atual == 0:
+            return{
+                "raiz": x_atual,
+                "convergiu": False,
+                "iteracoes": i,
+                "erro": None,
+                "residuo": abs(f_atual),
+                "historico": historico
+            }
+        
+        x_proximo = x_atual - f_atual / df_atual
+        erro = abs(x_proximo - x_atual)
+        residuo = abs(f(x_proximo))
+
+        historico.append({
+            "iteracao": i + 1,
+            "x_anterior": x_atual,
+            "x_atual": x_proximo,
+            "erro": erro,
+            "residuo": residuo
+        })
+
+        if (
+            erro < tolerancia_x
+            and
+            residuo < tolerancia_f
+        ):
+            return {
+                "raiz": x_proximo,
+                "convergiu": True,
+                "iteracoes": i + 1,
+                "erro": erro,
+                "residuo": residuo,
+                "historico": historico
+            }
+
+        x_atual = x_proximo
+
+
+    return {
+        "raiz": x_atual,
+        "convergiu": False,
+        "iteracoes": max_iter,
+        "erro": erro,
+        "residuo": residuo,
+        "historico": historico
+    }
