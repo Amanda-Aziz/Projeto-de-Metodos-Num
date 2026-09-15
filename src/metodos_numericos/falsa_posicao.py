@@ -1,11 +1,6 @@
 # ORIENTAÇÃO - MÉTODO DA FALSA POSIÇÃO
 #
-# A implementação do método fica a critério do responsável.
-# O importante é manter a função compatível com o notebook.
-#
-#
 # ASSINATURA OBRIGATÓRIA DA FUNÇÃO
-#
 # A função deve possuir a seguinte assinatura:
 #
 # def falsa_posicao(
@@ -101,3 +96,71 @@
 #
 # Essas informações pertencem à aplicação do problema
 # e devem permanecer no notebook.
+
+
+
+def falsa_posicao(
+    f,
+    a,
+    b,
+    tolerancia_x=1e-6,
+    tolerancia_f=1e-6,
+    max_iter=100
+):
+    
+    fa = f(a)
+    fb = f(b)
+
+    if fa * fb >= 0:
+        raise ValueError(
+            "f(a) e f(b) devem ter sinais opostos: "
+            f"f(a)={fa}, f(b)={fb}"
+        )
+
+    historico = []
+    x_anterior = a
+    x_atual = None
+    f_x = None
+    erro = None
+    convergiu = False
+    iteracao = 0
+
+    while iteracao < max_iter:
+        iteracao += 1
+
+        x_atual = a - fa * (b - a) / (fb - fa)
+        f_x = f(x_atual)
+        erro = abs(x_atual - x_anterior)
+        residuo = abs(f_x)
+
+        historico.append({
+            "iteracao": iteracao,
+            "a": a,
+            "b": b,
+            "x_atual": x_atual,
+            "f_x": f_x,
+            "erro": erro,
+            "residuo": residuo,
+        })
+
+        if residuo < tolerancia_f and erro < tolerancia_x:
+            convergiu = True
+            break
+
+        if fa * f_x < 0:
+            b = x_atual
+            fb = f_x
+        else:
+            a = x_atual
+            fa = f_x
+
+        x_anterior = x_atual
+
+    return {
+        "raiz": x_atual,
+        "convergiu": convergiu,
+        "iteracoes": iteracao,
+        "erro": erro,
+        "residuo": abs(f_x),
+        "historico": historico,
+    }
