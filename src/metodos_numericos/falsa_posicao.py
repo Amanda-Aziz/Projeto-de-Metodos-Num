@@ -98,7 +98,6 @@
 # e devem permanecer no notebook.
 
 
-
 def falsa_posicao(
     f,
     a,
